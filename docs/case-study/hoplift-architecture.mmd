@@ -1,0 +1,106 @@
+graph TB
+    subgraph "Mobile Client - Flutter App"
+        direction TB
+        UI["UI Layer<br/>Screens & Widgets"]
+        CTRL["Controllers<br/>GetX State Management"]
+        SVC_F["Service Layer<br/>Interface Implementations"]
+        PIGEON["AppPigeon<br/>HTTP Client + Token Manager"]
+        SOCK_C["Socket.IO Client<br/>Real-time Events"]
+        HIVE["Hive CE<br/>Local Cache"]
+        SEC_STORE["Flutter Secure Storage<br/>Token Storage"]
+    end
+
+    subgraph "Backend - Node.js / Express"
+        direction TB
+        MW["Middleware Stack<br/>Helmet, CORS, XSS-Clean,<br/>Mongo Sanitize, Rate Limiter"]
+        ROUTER["API Router<br/>/api/v1/*"]
+        
+        subgraph "Entity Modules"
+            AUTH_E["Auth<br/>Controller → Service → Model"]
+            RIDE_E["Ride<br/>Controller → Service → Model"]
+            BOOK_E["Booking<br/>Controller → Service → Model"]
+            MSG_E["Message<br/>Controller → Service → Model"]
+            NOTIF_E["Notification<br/>Controller → Service → Model"]
+            USER_E["User<br/>Controller → Service → Model"]
+        end
+        
+        SOCK_S["Socket.IO Server<br/>Real-time Event Hub"]
+        CRON["Scheduled Jobs<br/>node-cron"]
+        
+        subgraph "Library / Utilities"
+            CLOUD_UP["Cloudinary Upload"]
+            EMAIL_SVC["Email Service<br/>Nodemailer"]
+            PAGINATION["Pagination"]
+            RATE_LIM["Rate Limiter"]
+        end
+    end
+
+    subgraph "Data & External Services"
+        MONGO[("MongoDB Atlas<br/>Mongoose ODM")]
+        CLOUDINARY["Cloudinary CDN<br/>Image Storage"]
+        SMTP["SMTP Server<br/>Gmail"]
+        GOOGLE_AUTH["Google OAuth 2.0"]
+        FACEBOOK_AUTH["Facebook Graph API"]
+        APPLE_AUTH["Apple Sign-In<br/>JWKS Verification"]
+    end
+
+    %% Mobile to Backend
+    UI --> CTRL
+    CTRL --> SVC_F
+    SVC_F --> PIGEON
+    PIGEON -->|"REST API<br/>JWT Bearer Token"| MW
+    SOCK_C <-->|"WebSocket<br/>Real-time Events"| SOCK_S
+    CTRL --> HIVE
+    PIGEON --> SEC_STORE
+
+    %% Backend Internal
+    MW --> ROUTER
+    ROUTER --> AUTH_E
+    ROUTER --> RIDE_E
+    ROUTER --> BOOK_E
+    ROUTER --> MSG_E
+    ROUTER --> NOTIF_E
+    ROUTER --> USER_E
+
+    %% Service to Data
+    AUTH_E --> MONGO
+    RIDE_E --> MONGO
+    BOOK_E --> MONGO
+    MSG_E --> MONGO
+    NOTIF_E --> MONGO
+    USER_E --> MONGO
+
+    %% Cross-entity communication
+    RIDE_E -->|"Creates bookings,<br/>chat rooms,<br/>notifications"| BOOK_E
+    RIDE_E --> MSG_E
+    RIDE_E --> NOTIF_E
+    BOOK_E --> RIDE_E
+
+    %% External services
+    USER_E --> CLOUD_UP
+    CLOUD_UP --> CLOUDINARY
+    AUTH_E --> EMAIL_SVC
+    EMAIL_SVC --> SMTP
+    AUTH_E -->|"Token Verification"| GOOGLE_AUTH
+    AUTH_E -->|"Access Token Verification"| FACEBOOK_AUTH
+    AUTH_E -->|"JWKS Verification"| APPLE_AUTH
+
+    %% Cron jobs
+    CRON -->|"Every 10 min:<br/>Auto-complete rides"| RIDE_E
+    CRON -->|"Every 2 min:<br/>Delete expired chats"| MSG_E
+
+    %% Socket emissions
+    RIDE_E -->|"ride_created, ride_joined,<br/>ride_left, user_kicked"| SOCK_S
+    MSG_E -->|"newMessage, userJoined,<br/>userLeft, messagesRead"| SOCK_S
+    NOTIF_E -->|"notification"| SOCK_S
+
+    %% Styling
+    classDef mobile fill:#E3F2FD,stroke:#1565C0,color:#0D47A1
+    classDef backend fill:#F3E5F5,stroke:#7B1FA2,color:#4A148C
+    classDef data fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20
+    classDef external fill:#FFF3E0,stroke:#E65100,color:#BF360C
+
+    class UI,CTRL,SVC_F,PIGEON,SOCK_C,HIVE,SEC_STORE mobile
+    class MW,ROUTER,AUTH_E,RIDE_E,BOOK_E,MSG_E,NOTIF_E,USER_E,SOCK_S,CRON,CLOUD_UP,EMAIL_SVC,PAGINATION,RATE_LIM backend
+    class MONGO data
+    class CLOUDINARY,SMTP,GOOGLE_AUTH,FACEBOOK_AUTH,APPLE_AUTH external

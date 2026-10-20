@@ -1,0 +1,277 @@
+{
+  "project": {
+    "name": "Hoplift",
+    "type": "Ride-Sharing / Carpooling Mobile Application",
+    "description": "A ride sharing app (from pubspec.yaml)",
+    "version": {
+      "flutter": "1.0.12+16",
+      "backend": "1.0.0"
+    },
+    "productionApi": "https://api.hopliftapp.com/api/v1",
+    "repository": "https://github.com/ZihadulIslam2/Hoplift",
+    "status": "Production deployed (API domain verified in codebase)"
+  },
+
+  "technologies": {
+    "verified": {
+      "backend": [
+        { "name": "Node.js", "role": "Runtime environment" },
+        { "name": "Express", "version": "4.18.2", "role": "HTTP server framework" },
+        { "name": "MongoDB", "role": "Document database" },
+        { "name": "Mongoose", "version": "7.0.0", "role": "MongoDB ODM" },
+        { "name": "Socket.IO", "version": "4.8.1", "role": "Real-time WebSocket communication" },
+        { "name": "JWT (jsonwebtoken)", "version": "9.0.2", "role": "Authentication tokens" },
+        { "name": "bcrypt", "version": "5.1.1", "role": "Password hashing" },
+        { "name": "Helmet", "version": "6.0.0", "role": "HTTP security headers" },
+        { "name": "express-rate-limit", "version": "6.7.0", "role": "Rate limiting" },
+        { "name": "xss-clean", "version": "0.1.1", "role": "XSS prevention" },
+        { "name": "express-mongo-sanitize", "version": "2.2.0", "role": "NoSQL injection prevention" },
+        { "name": "Cloudinary", "version": "2.6.0", "role": "Image CDN and storage" },
+        { "name": "Nodemailer", "version": "6.10.1", "role": "Email delivery" },
+        { "name": "node-cron", "version": "4.2.1", "role": "Scheduled background jobs" },
+        { "name": "Winston", "version": "3.8.2", "role": "Structured logging" },
+        { "name": "Morgan", "version": "1.10.0", "role": "HTTP request logging" },
+        { "name": "Multer", "version": "1.4.5", "role": "File upload handling" },
+        { "name": "google-auth-library", "version": "10.4.0", "role": "Google OAuth verification" },
+        { "name": "jwks-rsa", "version": "3.2.0", "role": "Apple Sign-In JWKS verification" },
+        { "name": "Axios", "version": "1.12.2", "role": "HTTP client (Facebook Graph API)" }
+      ],
+      "frontend": [
+        { "name": "Flutter", "version": "SDK ^3.8.1", "role": "Cross-platform mobile framework" },
+        { "name": "GetX", "version": "4.7.2", "role": "State management, routing" },
+        { "name": "get_it", "version": "8.0.3", "role": "Dependency injection / service locator" },
+        { "name": "Dio", "version": "5.9.0", "role": "HTTP client" },
+        { "name": "socket_io_client", "version": "3.1.2", "role": "WebSocket client" },
+        { "name": "flutter_secure_storage", "version": "9.2.4", "role": "Encrypted credential storage" },
+        { "name": "Hive CE", "version": "2.15.1", "role": "Local NoSQL cache" },
+        { "name": "easy_localization", "version": "3.0.3", "role": "Multi-language support (25 locales)" },
+        { "name": "dartz", "version": "0.10.1", "role": "Functional programming (Either type)" },
+        { "name": "flutter_appauth", "version": "10.0.0", "role": "OAuth/OIDC native flows" },
+        { "name": "flutter_facebook_auth", "version": "7.1.2", "role": "Facebook native login" },
+        { "name": "image_picker", "version": "1.1.0", "role": "Camera/gallery image selection" },
+        { "name": "flutter_rating_bar", "version": "4.0.1", "role": "Star rating widget" },
+        { "name": "pin_code_fields", "version": "8.0.1", "role": "OTP input widget" },
+        { "name": "shimmer", "version": "3.0.0", "role": "Loading skeleton animations" },
+        { "name": "flutter_markdown", "version": "0.7.7+1", "role": "Markdown rendering (ToS, docs)" }
+      ],
+      "devops": [
+        { "name": "PM2", "role": "Process manager (production)" },
+        { "name": "ESLint", "role": "JavaScript linting" },
+        { "name": "Prettier", "role": "Code formatting" },
+        { "name": "Nodemon", "role": "Development auto-restart" }
+      ]
+    },
+    "configured_but_unused": [
+      { "name": "Jest", "reason": "Listed in devDependencies but no test files exist" },
+      { "name": "Supertest", "reason": "Listed in devDependencies but no test files exist" },
+      { "name": "Joi", "reason": "Installed but not used as validation middleware" }
+    ]
+  },
+
+  "features": [
+    {
+      "name": "Email Registration with OTP Verification",
+      "status": "fully_implemented",
+      "userProblem": "Account security — verify email ownership before activation",
+      "backendFiles": ["backend/src/entities/auth/auth.service.js"],
+      "frontendFiles": ["flutter-app/lib/modules/auth/screen/register_screen.dart"],
+      "endpoints": ["POST /api/v1/auth/register/init", "POST /api/v1/auth/register/verify"],
+      "complexity": "medium",
+      "businessValue": "Prevents fake accounts, ensures communication channel validity"
+    },
+    {
+      "name": "Multi-Provider Social Login (Google, Facebook, Apple)",
+      "status": "fully_implemented",
+      "userProblem": "Reduce registration friction for users with existing social accounts",
+      "backendFiles": ["backend/src/entities/auth/auth.service.js"],
+      "frontendFiles": ["flutter-app/lib/modules/auth/screen/signin_screen.dart"],
+      "endpoints": ["POST /api/v1/auth/social-login"],
+      "complexity": "high",
+      "businessValue": "Higher conversion rate, Apple Sign-In required for iOS App Store"
+    },
+    {
+      "name": "Geospatial Ride Search with Direction Awareness",
+      "status": "fully_implemented",
+      "userProblem": "Find rides matching both location proximity AND travel direction",
+      "backendFiles": ["backend/src/entities/ride/ride.service.js"],
+      "frontendFiles": ["flutter-app/lib/modules/ride&booking/ui/view/search_ride_view.dart"],
+      "endpoints": ["GET /api/v1/ride"],
+      "complexity": "high",
+      "businessValue": "Higher match quality, fewer false positives in search results"
+    },
+    {
+      "name": "Ride Creation with Automatic Chat Room",
+      "status": "fully_implemented",
+      "userProblem": "Offer empty seats and enable coordination with future passengers",
+      "backendFiles": ["backend/src/entities/ride/ride.service.js"],
+      "frontendFiles": ["flutter-app/lib/modules/ride&booking/ui/view/create_ride_view.dart"],
+      "endpoints": ["POST /api/v1/ride"],
+      "complexity": "medium",
+      "businessValue": "Supply-side enablement — any user can offer rides"
+    },
+    {
+      "name": "Atomic Seat Booking with Overbooking Prevention",
+      "status": "fully_implemented",
+      "userProblem": "Prevent two users from booking the same seat simultaneously",
+      "backendFiles": ["backend/src/entities/booking/booking.model.js", "backend/src/entities/ride/ride.service.js"],
+      "frontendFiles": ["flutter-app/lib/modules/ride&booking/ui/view/join_ride_bottomsheet.dart"],
+      "endpoints": ["POST /api/v1/ride/:rideId/join"],
+      "complexity": "high",
+      "businessValue": "Data integrity, user trust in booking confirmations"
+    },
+    {
+      "name": "Democratic Vote-Kick System",
+      "status": "fully_implemented",
+      "userProblem": "Remove disruptive passengers without centralized moderation",
+      "backendFiles": ["backend/src/entities/ride/ride.service.js"],
+      "frontendFiles": ["flutter-app/lib/modules/ride&booking/controller/kickout_rider_controller.dart"],
+      "endpoints": ["POST /api/v1/ride/:rideId/kick", "GET /api/v1/ride/:rideId/kick-status/:userId"],
+      "complexity": "very_high",
+      "businessValue": "Peer-governed safety, no need for 24/7 moderation team"
+    },
+    {
+      "name": "Real-Time Group Chat (per ride)",
+      "status": "fully_implemented",
+      "userProblem": "Coordinate pickup details without exchanging personal contact info",
+      "backendFiles": ["backend/src/entities/message/message.service.js"],
+      "frontendFiles": ["flutter-app/lib/modules/message/ui/view/inbox_screen.dart"],
+      "endpoints": ["GET /api/v1/message/rooms", "POST /api/v1/message/:roomId"],
+      "complexity": "high",
+      "businessValue": "In-context communication, reduces coordination friction"
+    },
+    {
+      "name": "Post-Ride Mutual Rating System",
+      "status": "fully_implemented",
+      "userProblem": "Build trust by establishing reputation through ride history",
+      "backendFiles": ["backend/src/entities/ride/ride.service.js", "backend/src/entities/rating/rating.model.js"],
+      "frontendFiles": ["flutter-app/lib/modules/ride&booking/controller/rate_ride_controller.dart"],
+      "endpoints": ["POST /api/v1/ride/:rideId/rate"],
+      "complexity": "medium",
+      "businessValue": "Accountability, informed ride partner selection"
+    },
+    {
+      "name": "Automated Ride Lifecycle Management",
+      "status": "fully_implemented",
+      "userProblem": "Stale rides and chat rooms pollute search results and consume storage",
+      "backendFiles": ["backend/src/lib/finishJob.js", "backend/src/lib/autoDeleteExpiredChatRooms.js"],
+      "frontendFiles": [],
+      "endpoints": [],
+      "complexity": "medium",
+      "businessValue": "Clean data, relevant search results, controlled storage growth"
+    },
+    {
+      "name": "25-Language Localization",
+      "status": "fully_implemented",
+      "userProblem": "Non-English speakers need the app in their language",
+      "backendFiles": [],
+      "frontendFiles": ["flutter-app/lib/main.dart"],
+      "endpoints": [],
+      "complexity": "medium",
+      "businessValue": "Global market readiness"
+    },
+    {
+      "name": "In-App Notifications with Auto-Expiry",
+      "status": "fully_implemented",
+      "userProblem": "Stay informed about ride events (joins, kicks, completions, ratings)",
+      "backendFiles": ["backend/src/entities/notification/notification.model.js", "backend/src/entities/notification/notification.service.js"],
+      "frontendFiles": ["flutter-app/lib/modules/notification/screen/notification_screen.dart"],
+      "endpoints": ["GET /api/v1/notification/user"],
+      "complexity": "low",
+      "businessValue": "User engagement, event awareness"
+    }
+  ],
+
+  "engineeringChallenges": [
+    {
+      "id": "EC-01",
+      "title": "Geospatial Ride Matching with Direction Awareness",
+      "summary": "Two-phase matching: MongoDB $geoNear for proximity + in-memory bearing calculation for direction",
+      "sourceFiles": ["backend/src/entities/ride/ride.service.js"],
+      "lineRange": "170-404",
+      "complexity": "high"
+    },
+    {
+      "id": "EC-02",
+      "title": "Concurrent Seat Booking with Overbooking Prevention",
+      "summary": "Mongoose pre-save hook with aggregation-based seat count validation",
+      "sourceFiles": ["backend/src/entities/booking/booking.model.js"],
+      "lineRange": "56-107",
+      "complexity": "high"
+    },
+    {
+      "id": "EC-03",
+      "title": "Weighted Democratic Vote-Kick System",
+      "summary": "Vote weight proportional to seats held, threshold = ceil(50% of active seats), cascade cleanup",
+      "sourceFiles": ["backend/src/entities/ride/ride.service.js"],
+      "lineRange": "785-1073",
+      "complexity": "very_high"
+    },
+    {
+      "id": "EC-04",
+      "title": "Automated Ride Lifecycle Management",
+      "summary": "Two cron jobs: auto-complete rides (10min), cleanup expired chats (2min)",
+      "sourceFiles": ["backend/src/lib/finishJob.js", "backend/src/lib/autoDeleteExpiredChatRooms.js"],
+      "lineRange": "full files",
+      "complexity": "medium"
+    },
+    {
+      "id": "EC-05",
+      "title": "Multi-Provider Authentication with Token Rotation",
+      "summary": "Four auth providers (email+OTP, Google, Facebook, Apple) converging to unified JWT token pair",
+      "sourceFiles": ["backend/src/entities/auth/auth.service.js"],
+      "lineRange": "1-302",
+      "complexity": "high"
+    },
+    {
+      "id": "EC-06",
+      "title": "Transactional Post-Ride Rating with Bulk Submission",
+      "summary": "MongoDB session transaction for bulk rating insertion with self-rating prevention",
+      "sourceFiles": ["backend/src/entities/ride/ride.service.js"],
+      "lineRange": "1211-1287",
+      "complexity": "medium"
+    }
+  ],
+
+  "databaseModels": [
+    { "name": "User", "file": "backend/src/entities/auth/auth.model.js", "keyFields": ["name", "email", "provider", "role", "profileImage", "otp", "refreshToken", "blockedUsers"] },
+    { "name": "Ride", "file": "backend/src/entities/ride/ride.model.js", "keyFields": ["creator", "startLocation (GeoJSON)", "endLocation (GeoJSON)", "departureTime", "seatCount", "bookedSeats", "kickedVotes", "chatRoom", "chatLocked"] },
+    { "name": "Booking", "file": "backend/src/entities/booking/booking.model.js", "keyFields": ["ride", "user", "seatBooked", "baggageType", "status", "kicked"] },
+    { "name": "ChatRoom", "file": "backend/src/entities/message/chatRoom.model.js", "keyFields": ["ride", "participants", "isGroup", "messages"] },
+    { "name": "Message", "file": "backend/src/entities/message/message.model.js", "keyFields": ["chatRoom", "sender", "type", "replyTo", "readBy"] },
+    { "name": "Notification", "file": "backend/src/entities/notification/notification.model.js", "keyFields": ["user", "type", "ride", "isRead", "expiresAt (TTL)"] },
+    { "name": "Rating", "file": "backend/src/entities/rating/rating.model.js", "keyFields": ["ride", "rater", "ratedUser", "rating (1-5)"] }
+  ],
+
+  "screenshots": {
+    "essential": ["HOP-01", "HOP-02", "HOP-03", "HOP-04", "HOP-05", "HOP-07", "HOP-08", "HOP-09"],
+    "recommended": ["HOP-06", "HOP-10", "HOP-11"],
+    "optional": ["HOP-12", "HOP-13"],
+    "firstFive": [
+      { "id": "HOP-03", "title": "Home / Search Ride Form", "reason": "Hero screenshot — the primary user interaction" },
+      { "id": "HOP-04", "title": "Search Results with Ride Cards", "reason": "Shows the core matching algorithm output" },
+      { "id": "HOP-08", "title": "Active Chat / Messaging", "reason": "Demonstrates real-time coordination" },
+      { "id": "HOP-02", "title": "Login with Social Options", "reason": "Shows multi-provider auth" },
+      { "id": "HOP-09", "title": "My Bookings / Active Tab", "reason": "Shows booking management" }
+    ]
+  },
+
+  "assumptions_requiring_confirmation": [
+    "Developer's specific role (solo developer, lead developer, team contributor, etc.)",
+    "Team size and composition",
+    "Whether the app is published on App Store and/or Play Store",
+    "Active user count and usage metrics",
+    "The purpose and origin of obfuscated code in ecosystem.config.js",
+    "Whether the MongoDB Atlas cluster is a paid production tier"
+  ],
+
+  "limitations": [
+    "No payment integration (Stripe field exists in user schema but is unused)",
+    "No push notifications (only in-app via Socket.IO)",
+    "No automated test files present (Jest/Supertest configured but unused)",
+    "Single-process deployment (no Redis adapter for Socket.IO scaling)",
+    "No map visualization in the mobile app",
+    ".env file committed with production credentials",
+    "CORS set to allow all origins",
+    "User blocking field exists in schema but is not enforced in ride search/join"
+  ]
+}
