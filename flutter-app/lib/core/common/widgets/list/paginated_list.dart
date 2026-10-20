@@ -1,0 +1,83 @@
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../../base/pagination.dart';
+
+class PaginatedListWidget<T> extends StatefulWidget {
+  final Rx<Pagination<T>> pagination;
+  final Widget skeleton;
+  final String emptyMessage;
+  /// How many skeletons to show, when there is no data
+  final int skeletonCount;
+  final VoidCallback onRefresh;
+  final Widget Function(int index, T data) builder;
+  const PaginatedListWidget({super.key, required this.pagination, this.emptyMessage = "No data found!", required this.onRefresh, required this.skeleton, required this.skeletonCount, required this.builder});
+
+  @override
+  State<PaginatedListWidget<T>> createState() => _PaginatedListWidgetState<T>();
+}
+
+class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async{
+          widget.onRefresh();
+        },
+        child: ObxValue(
+          (data) {
+            if(data.value is Loaded<T> && data.value.data.isEmpty) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: Text(widget.emptyMessage)),
+                  IconButton(onPressed: widget.onRefresh, icon: const Icon(Icons.refresh))
+                ],
+              );
+            }
+            return ListView.builder(
+              itemCount: data.value.data.length + 1,
+              itemBuilder: (context, index) {
+                debugPrint("Index: $index, length: ${data.value.data.length}, data type ${data.value.runtimeType}");
+                if(index == data.value.data.length) {
+                  if((data.value is LoadingMorePage<T> || data.value is RefreshingPage<T>)) {
+                    return Column(
+                      children: [
+                        ...List.generate(widget.skeletonCount, (_)=>
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: widget.skeleton
+                          )
+                        )
+                      ],
+                    );
+                  } else {
+                    return Container();
+                  }
+
+                }
+                final element = data.value.data[index];
+                return widget.builder(index, element);
+              },
+            );
+          },
+          widget.pagination
+        ),
+      ),
+    
+    );
+  }
+}

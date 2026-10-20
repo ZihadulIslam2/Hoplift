@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name -->
+    <string name="app_name">HopLift</string>
+    <string name="facebook_app_id">1496178054917424</string>
+    <string name="fb_login_protocol_scheme">fb1496178054917424</string>
+    <string name="facebook_client_token">daa75af79cf02b2c68054a90c98e0979</string>
+</resources>
+
